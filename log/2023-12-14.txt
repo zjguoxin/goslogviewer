@@ -1,3 +1,0 @@
-{"level":"INFO","time":"2023-12-14 03:59:46","msg":"协程调用文件:[/Users/guxline/code/go/go_gin_base/controller/authController.go]函数:[skypulse/golang-gin-base/controller.test]第[44]行导致panictest"}
-{"level":"INFO","time":"2023-12-14 03:59:48","msg":"协程调用文件:[/Users/guxline/code/go/go_gin_base/controller/authController.go]函数:[skypulse/golang-gin-base/controller.test]第[44]行导致panictest"}
-{"level":"INFO","time":"2023-12-14 03:59:51","msg":"协程调用文件:[/Users/guxline/code/go/go_gin_base/controller/authController.go]函数:[skypulse/golang-gin-base/controller.test]第[44]行导致panictest"}

@@ -1,4 +1,0 @@
-{"level":"ERROR","time":"2025-06-30 18:57:48","msg":"连接COS失败errorinvalid bucket format, please check your cos.BaseURL"}
-{"level":"ERROR","time":"2025-06-30 18:58:10","msg":"连接COS失败errorinvalid bucket format, please check your cos.BaseURL"}
-{"level":"ERROR","time":"2025-06-30 18:58:50","msg":"连接COS失败errorinvalid bucket format, please check your cos.BaseURL"}
-{"level":"ERROR","time":"2025-06-30 19:11:20","msg":"连接COS失败errorHEAD https://caigouban1-1255571243.cos.ap-shanghai.myqcloud.com/: 404 (Message: , RequestId: Njg2MjcwZDhfYTU5ZjA4MDlfNDY5NF8yYzZjZTQw, TraceId: OGVmYzZiMmQzYjA2OWNhODk0NTRkMTBiOWVmMDAxODc1NGE1MWY0MzY2NTg1MzM1OTY3MDliYzY2YTQ0ZThhMDFhOWZlZTQxMzRkMTQ2NGM4MmFlZDk1MTQzM2UyMTll)"}
