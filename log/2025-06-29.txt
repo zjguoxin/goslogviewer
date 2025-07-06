@@ -1,0 +1,7 @@
+{"level":"INFO","time":"2025-06-29 12:03:12","msg":"登录状态缓存:login"}
+{"level":"INFO","time":"2025-06-29 12:03:23","msg":"登录状态缓存:login"}
+{"level":"INFO","time":"2025-06-29 12:03:35","msg":"登录状态缓存:login"}
+{"level":"INFO","time":"2025-06-29 12:04:11","msg":"登录状态缓存:login"}
+{"level":"INFO","time":"2025-06-29 12:04:11","msg":"登录状态缓存1:admin"}
+{"level":"INFO","time":"2025-06-29 12:04:13","msg":"登录状态缓存:login"}
+{"level":"INFO","time":"2025-06-29 12:04:13","msg":"登录状态缓存1:admin"}

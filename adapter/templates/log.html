@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.101.0">
+    <title>{{.head}}</title>
+    <!-- <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/dashboard/"> -->
+    <link rel="stylesheet" href="static/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet"href="static/bootstrap-table.min.css">
+   
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      th ,td {
+        text-align: center;
+      }
+      #logName{
+        font-size: medium;
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="static/dashboard.css" rel="stylesheet">
+  </head>
+  <body>
+    
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">{{.title}}</a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" href="#">Sign out</a>
+    </li>
+  </ul>
+</nav> 
+
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="sidebar-sticky pt-4">
+        <ul class="nav flex-column pagination" id="file_lists">
+      
+        </ul>
+      </div>
+    </nav>
+   
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <div style="margin-top: 20PX;" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Log File</h1><b><span id="logName"></span></b>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="refresh">Refresh</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="clear">Clear</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="export">Export</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="delete_all">Delete All</button>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table id="myTab" class="table table-striped" data-toggle="myTab">
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="success" class="alert alert-success fade " style="width: 250px;text-align: center; position: fixed; top: 40%; left: 50%; margin-left: -80px;" >
+  
+</div>
+<div id="fail" class="alert alert-danger fade"   style="width: 250px; text-align: center;position: fixed; top: 40%; left: 50%; margin-left: -80px;" >
+  
+</div>
+    <script src="static/jquery-3.5.1.min.js"></script>
+    <script src="static/bootstrap.bundle.min.js"></script>
+    <script src="static/feather.min.js"></script>
+    <script src="static/bootstrap-table.min.js"></script>
+    <script src="static/popper.min.js"></script>
+    <script>
+        $(document).ready(function(){
+          initTable();
+            let obj = $('#file_lists')
+            $.get("/log/getLogFilesList",{},function(res){
+                if(res.code == 200){
+                    let files = res.files
+                    if(files != null){
+                        for(i = (files.length-1);i >= 0;i--){
+                        let fileName = "2023-06-18.txt"
+                        fileName = files[i]
+                        obj.append('<li class="nav-item"><i class="bi bi-filetype-txt"></i><a class="nav-link" ' +
+                        'href="#">'+ fileName +'</a></li>')
+                        }
+                        if(files[0] != undefined){
+                          $('#myTab').bootstrapTable('refresh',{
+                            data:[{"level":"1"},{"time":"2"},{"msg":"aaa"}],
+                          });
+                    
+                           $.get('/log/getFileContent',{name:files[0]},function(res){
+                              if(res.code == 200){
+                                getFileContent(files[0])
+                              }else{
+                                fail(res.msg)
+                              }
+                            })
+                        }
+                    }
+                }
+            });
+        })
+        function getFileContent(fileName){
+            $.get("/log/getFileContent",{name:fileName},function(res){
+                if(res.code==200){
+                  success(res.msg)
+                    let data = res.data
+                    $('#logName').html(fileName)
+                    if(data !=null){
+                      $('#myTab').bootstrapTable("refreshOptions",{data:res.data})
+                    } else{
+                      $('#myTab').bootstrapTable("refreshOptions",{data:[]})
+                    }
+                }else{
+                  fail(res.msg)
+                }
+            })
+        }
+        function clearFileContent(fileName){
+            $.post("/log/clearFileContent",{name:fileName},function(res){
+                if(res.code == 200){
+                  getFileContent(fileName)
+                }else{
+                  fail(res.msg)
+                }
+            })
+        }
+        $(document).on('click', '.nav-link', function () {
+          let obj = $(this)
+          $('.nav-link').removeClass('active')
+          obj.addClass('active')
+          getFileContent(obj.text())
+        })
+
+        $(document).on('click', '#refresh', function () {
+            getFileContent($('#logName').text())
+        })
+        $(document).on('click', '#clear', function () {
+            let fileName = $('#logName').text()
+            if(confirm("确定要清除"+fileName+"日志文件内容吗?")){
+                clearFileContent(fileName)
+            }
+        })
+        $(document).on('click', '#delete_all', function () {
+            let fileName = $('#logName').text()
+            if(confirm("确定要清除所有日志文件内容吗?")){
+                $.post("/log/deleteAllFiles",{},function(res){
+                    if(res.code ==200){
+                       location.reload()
+                    }else{
+                      fail(res.msg)
+                    }
+                })
+            }
+        })
+        $(document).on('click', '#export', function () {
+            let fileName = $('#logName').text()
+            $.get("/log/exportFile",{name:fileName},function(res){
+                if(res.code ==200){
+                    let content = res.data
+                    let blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+                    let link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = fileName;
+                    link.click();
+                }else{
+                    fail(res.msg)
+                }
+            })
+            // if(confirm("确定要导出"+fileName+"日志文件吗?")){
+            //     location.href = "/log/exportFile?name="+fileName
+            // }
+        })
+
+        function initTable(){
+          $('#myTab').bootstrapTable({
+            data:[],
+            striped : true, //是否显示行间隔色
+            pageNumber : 1, //初始化加载第一页
+            pagination : true,//是否分页
+            sidePagination : 'client',//server:服务器端分页|client：前端分页
+            pageSize : 10,//单页记录数
+            pageList : [ 10, 20, 30 ],//可选择单页记录数
+            search: true,
+            paginationLoop: true,
+            sortName: "time",
+            sortOrder: "desc",
+            theadClasses:'thead-dark',
+            columns : [{
+              title : '#',
+              field : 'num',
+              align : 'center',
+              width : 50,
+              formatter : function(value, row, index){
+                return index + 1
+              },
+              },{
+              title : 'Level',
+              field : 'level',
+              align : 'center',
+              width : 200,
+              }, {
+                title : 'Time',
+                field : 'time',
+                sortable : true,
+                align : 'center',
+                width : 400,
+              }, {
+                title : 'Message',
+                field : 'msg',
+                align : 'left',
+              }]
+            })
+        }
+        function success(msg){
+          $("#success").addClass("show");
+          $("#success").html(msg);
+            window.setTimeout(function(){
+         		$("#success").removeClass("show");
+         },1000)
+        }
+
+        function fail(msg){
+            $("#fail").addClass("show");
+            $("#fail").html(msg);
+            window.setTimeout(function(){
+            $("#fail").removeClass("show");
+         },1000);
+        }
+    </script>
+  </body>
+</html>
