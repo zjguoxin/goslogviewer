@@ -42,7 +42,7 @@
 # 安装方式
 
 ```bash
-go get github.com/yourusername/goslogviewer
+go get github.com/zjguoxin/goslogviewer
 ```
 
 # 使用方法
